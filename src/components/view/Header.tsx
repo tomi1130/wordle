@@ -12,27 +12,27 @@ import React from 'react'
 
 export default function Header() {
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <Button>
-          <IconContext.Provider value={{ size: '25px' }}>
-            <BsFillQuestionCircleFill />
-          </IconContext.Provider>
-        </Button>
-        <Container maxWidth="sm">
-          <div className="flex justify-center">Wordle</div>
-        </Container>
-        <Button>
-          <IconContext.Provider value={{ size: '25px' }}>
-            <BsFillQuestionCircleFill />
-          </IconContext.Provider>
-        </Button>
-        <Button>
-          <IconContext.Provider value={{ size: '25px' }}>
-            <BsFillQuestionCircleFill />
-          </IconContext.Provider>
-        </Button>
-      </Toolbar>
-    </AppBar>
+    <div className="mb-3 mt-3 flex border-b-2">
+      <button>
+        <IconContext.Provider value={{ size: '25px' }}>
+          <BsFillQuestionCircleFill />
+        </IconContext.Provider>
+      </button>
+      <Container maxWidth="sm">
+        <div className="flex justify-center text-center text-4xl font-bold uppercase text-gray-800">
+          Wordle
+        </div>
+      </Container>
+      <button className="mr-3">
+        <IconContext.Provider value={{ size: '25px' }}>
+          <BsFillQuestionCircleFill />
+        </IconContext.Provider>
+      </button>
+      <button className="mr-1">
+        <IconContext.Provider value={{ size: '25px' }}>
+          <BsFillQuestionCircleFill />
+        </IconContext.Provider>
+      </button>
+    </div>
   )
 }

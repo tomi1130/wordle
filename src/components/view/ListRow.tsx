@@ -1,12 +1,16 @@
 import React from 'react'
 import ListSquare from './ListSquare'
 
-export default function ListRow() {
-  const array = ['a', 'a', 'a', 'a']
+export default function ListRow(props: any) {
+  const arry = ['', '', '', '']
   return (
     <div className="flex">
-      {array.map((value, key) => (
-        <ListSquare />
+      {arry.map((value, i) => (
+        <ListSquare
+          values={props.list[props.rowNum + i]}
+          key={i}
+          value={value}
+        />
       ))}
     </div>
   )

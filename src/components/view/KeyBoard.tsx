@@ -1,24 +1,39 @@
 import React from 'react'
 
-const hiragana =
-  'あ い う え お,か き く け こ,さ し す せ そ,た ち つ て と,な に ぬ ね の,は ひ ふ へ ほ,ま み む め も,や ゆ よ,わ ん'
-export default function KeyBoard() {
+const hiragana = `ぱ ぴ ぷ ぺ ぽ
+ば び ぶ べ ぼ
+だ ぢ づ で ど
+ざ じ ず ぜ ぞ
+が ぎ ぐ げ ご
+わ を ー
+や ゆ よ
+ま み む め も
+は ひ ふ へ ほ
+な に ぬ ね の ん
+た ち つ て と
+さ し す せ そ
+か き く け こ
+あ い う え お`
+export default function KeyBoard(props: any) {
+  const { pushKeyboard } = props
   const ary = hiragana
     .trim()
-    .split(',')
+    .split('\n')
     .map(function (item) {
       return item.trim().replace(/\s+/g, ' ').split(' ')
     })
+
   return (
-    <>
+    <div className="flex">
       {ary.map((items, index) => {
         return (
-          <div>
+          <div key={index} className="flex-col">
             {items.map((subItems, sIndex) => {
               return (
                 <div
                   key={sIndex}
-                  className="m-px flex h-10 w-10 items-center justify-center rounded-xl border-2 border-solid border-black"
+                  onClick={() => pushKeyboard(subItems)}
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border-2 border-solid border-black  bg-blue-500 bg-opacity-50 text-xl  font-semibold hover:opacity-75"
                 >
                   {subItems}
                 </div>
@@ -27,6 +42,6 @@ export default function KeyBoard() {
           </div>
         )
       })}
-    </>
+    </div>
   )
 }

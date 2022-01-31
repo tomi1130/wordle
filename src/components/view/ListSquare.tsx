@@ -7,10 +7,13 @@ const ary = hiragana
   .map(function (item) {
     return item.trim().replace(/\s+/g, ' ').split(' ')
   })
-export default function ListSquare() {
+export default function ListSquare(props: any) {
   return (
-    <div className="m-px flex h-20 w-20 items-center justify-center rounded-xl border-2 border-solid border-indigo-600">
-      あ
+    <div
+      className="m-px flex h-16 w-16 items-center justify-center rounded-xl border-2 border-solid border-indigo-600 text-xl font-semibold"
+      key={props.key}
+    >
+      {props.values.letter}
     </div>
   )
 }
