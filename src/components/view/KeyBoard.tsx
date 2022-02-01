@@ -14,14 +14,14 @@ const hiragana = `ぱ ぴ ぷ ぺ ぽ
 さ し す せ そ
 か き く け こ
 あ い う え お`
+const ary = hiragana
+  .trim()
+  .split('\n')
+  .map(function (item) {
+    return item.trim().replace(/\s+/g, ' ').split(' ')
+  })
 export default function KeyBoard(props: any) {
   const { pushKeyboard } = props
-  const ary = hiragana
-    .trim()
-    .split('\n')
-    .map(function (item) {
-      return item.trim().replace(/\s+/g, ' ').split(' ')
-    })
 
   return (
     <div className="flex">

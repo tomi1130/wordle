@@ -1,7 +1,6 @@
-import { Snackbar } from '@material-ui/core'
+import { useToast } from '@chakra-ui/react'
 import type { NextPage } from 'next'
-import { useEffect, useState } from 'react'
-import { atom } from 'recoil'
+import { useEffect, useRef, useState } from 'react'
 import Header from '../components/view/Header'
 import KeyBoard from '../components/view/KeyBoard'
 import ListLine from '../components/view/ListLine'
@@ -16,64 +15,33 @@ export class LetterRow {
 
 const Home: NextPage = () => {
   const [text, setText] = useState('')
-  const [open, setOpen] = useState(false)
   const [errorText, setErrorText] = useState('')
   const [letterList, setLetterList] = useState<Array<LetterInfo>>([])
-  // const a = [
-  //   { letter: 'あ', match: false },
-  //   { letter: 'い', match: false },
-  //   { letter: 'う', match: false },
-  //   { letter: 'あ', match: false },
-  //   { letter: 'い', match: false },
-  //   { letter: 'う', match: false },
-  //   { letter: 'あ', match: false },
-  //   { letter: 'え', match: false },
-  //   { letter: 'う', match: false },
-  //   { letter: 'う', match: false },
-  //   { letter: 'あ', match: false },
-  //   { letter: 'え', match: false },
-  //   { letter: 'う', match: false },
-  //   { letter: 'あ', match: false },
-  //   { letter: 'えｙ', match: false },
-  //   { letter: 'う', match: false },
-  //   { letter: 'あ', match: false },
-  //   { letter: 'ｔｈえ', match: false },
-  //   { letter: 'う', match: false },
-  //   { letter: 'う', match: false },
-  //   { letter: 'あ', match: false },
-  //   { letter: 'え', match: false },
-  //   { letter: 'うｔ', match: false },
-  //   { letter: 'あ', match: false },
-  //   { letter: 'え', match: false },
-  //   { letter: 'う', match: false },
-  //   { letter: 'あ', match: false },
-  //   { letter: 'え', match: false },
-  //   { letter: 'う', match: false },
-  //   { letter: 'う', match: false },
-  //   { letter: 'あ', match: false },
-  //   { letter: 'え', match: false },
-  //   { letter: 'う', match: false },
-  //   { letter: 'あ', match: false },
-  //   { letter: 'え', match: false },
-  //   { letter: 'う', match: false },
-  //   { letter: 'あ', match: false },
-  //   { letter: 'え', match: false },
-  //   { letter: 'う', match: false },
-  //   { letter: 'う', match: false },
-  // ]
+  const prevletterListLen = usePrevious(letterList)
+  const [sideRow, setSideRow] = useState<any[]>([])
+  const toast = useToast()
 
-  const arry = []
   useEffect(() => {
     if (text.length === 4) {
       console.log('ここで辞書の中から検索')
     }
-    if (letterList.length !== 0) {
-      console.log(letterList)
+    if (prevletterListLen !== letterList.length) {
+      let arry = []
+      for (let i = 0; i < 2; i++) {
+        arry.push(<ListLine list={letterList} times={i} key={i} />)
+      }
+      setSideRow(arry)
     }
   }, [text, letterList])
-  for (let i = 0; i < 2; i++) {
-    arry.push(<ListLine list={letterList} times={i} />)
+
+  function usePrevious(value: any) {
+    const ref = useRef(null)
+    useEffect(() => {
+      ref.current = value.length
+    })
+    return ref.current
   }
+
   const handleChange = (e: any) => {
     setText(() => e.target.value)
   }
@@ -89,11 +57,19 @@ const Home: NextPage = () => {
     const textAry = text.split('')
     if (textAry.length !== 4) {
       setErrorText('4文字のひらがなで入力してね!!')
-      setOpen(true)
+      toast({
+        title: 'sss',
+        status: 'error',
+        isClosable: true,
+      })
     } else if (textAry.length === 4) {
       setErrorText('ナイス！！')
-      setOpen(true)
       checkText(textAry)
+      toast({
+        title: errorText,
+        status: 'success',
+        isClosable: true,
+      })
     }
   }
   function checkText(textAry: string[]) {
@@ -106,9 +82,6 @@ const Home: NextPage = () => {
     }
     setLetterList(ary)
   }
-  const handleToastClose = () => {
-    setOpen(false)
-  }
   const handleClickOnedelete = () => {
     var sliceText = text.slice(0, -1)
     setText(sliceText)
@@ -117,58 +90,50 @@ const Home: NextPage = () => {
     setText('')
   }
   return (
-    <>
-      <div className="container mx-auto w-fit">
-        <Header />
-        <div className="m-px flex max-h-60 overflow-auto">{arry}</div>
-        <div className="flex justify-center">
-          <input
-            className="focus:shadow-outline appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
-            id="inputForm"
-            type="text"
-            placeholder="キーボード入力用"
-            value={text}
-            onChange={handleChange}
-          ></input>
+    <div className="container mx-auto w-fit">
+      <Header />
+      <div className="m-px flex max-h-60 overflow-auto">{sideRow}</div>
+      <div className="flex justify-center">
+        <input
+          className="focus:shadow-outline appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+          id="inputForm"
+          type="text"
+          placeholder="キーボード入力用"
+          value={text}
+          onChange={handleChange}
+        ></input>
+      </div>
+      <div className="flex justify-center">
+        <div className="m-3 flex justify-center">
+          <button
+            className="rounded bg-green-400 px-2 py-1 text-xl font-semibold text-white hover:bg-green-500"
+            onClick={handleClickOnedelete}
+          >
+            1文字消す!!
+          </button>
         </div>
-        <div className="flex justify-center">
-          <div className="m-3 flex justify-center">
-            <button
-              className="rounded bg-green-400 px-2 py-1 text-xl font-semibold text-white hover:bg-green-500"
-              onClick={handleClickOnedelete}
-            >
-              1文字消す!!
-            </button>
-          </div>
 
-          <div className="m-3 flex justify-center">
-            <button
-              className="rounded bg-red-400 px-2 py-1 text-xl font-semibold text-white hover:bg-red-500"
-              onClick={handleClickAlldelete}
-            >
-              全部消す!!
-            </button>
-          </div>
-          <div className="m-3 flex justify-center">
-            <button
-              className="rounded bg-blue-400 px-2 py-1 text-xl font-semibold text-white hover:bg-blue-500"
-              onClick={OnClickGoButton}
-            >
-              これでいく!!
-            </button>
-          </div>
+        <div className="m-3 flex justify-center">
+          <button
+            className="rounded bg-red-400 px-2 py-1 text-xl font-semibold text-white hover:bg-red-500"
+            onClick={handleClickAlldelete}
+          >
+            全部消す!!
+          </button>
         </div>
-        <div className="flex max-h-60 overflow-auto">
-          <KeyBoard pushKeyboard={pushKeyboard} />
+        <div className="m-3 flex justify-center">
+          <button
+            className="rounded bg-blue-400 px-2 py-1 text-xl font-semibold text-white hover:bg-blue-500"
+            onClick={OnClickGoButton}
+          >
+            これでいく!!
+          </button>
         </div>
       </div>
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={handleToastClose}
-        message={errorText}
-      />
-    </>
+      <div className="flex max-h-60 overflow-auto">
+        <KeyBoard pushKeyboard={pushKeyboard} />
+      </div>
+    </div>
   )
 }
 
