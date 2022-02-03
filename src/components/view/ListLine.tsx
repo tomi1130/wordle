@@ -4,7 +4,6 @@ import ListRow from './ListRow'
 export default function ListLine(props: any) {
   const array = ['a', 'a', 'a', 'a', 'a']
   let aryLen = props.list.length
-  console.log(aryLen)
   let ary: any = []
   if (aryLen !== 40) {
     for (let i = 0; i < props.list.length; i++) {

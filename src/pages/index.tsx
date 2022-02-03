@@ -1,4 +1,4 @@
-import { useToast } from '@chakra-ui/react'
+import { Box, useToast } from '@chakra-ui/react'
 import type { NextPage } from 'next'
 import { useEffect, useRef, useState } from 'react'
 import Header from '../components/view/Header'
@@ -66,9 +66,12 @@ const Home: NextPage = () => {
       setErrorText('ナイス！！')
       checkText(textAry)
       toast({
-        title: errorText,
-        status: 'success',
-        isClosable: true,
+        position: 'bottom-left',
+        render: () => (
+          <Box color="white" p={3} bg="blue.500">
+            Hello World
+          </Box>
+        ),
       })
     }
   }
